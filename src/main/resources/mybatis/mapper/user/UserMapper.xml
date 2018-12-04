@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<mapper namespace="com.somesing.www.user.dao.UserDao">
+	
+	<insert id="insertUser" parameterType="userVO">
+		INSERT INTO SOMESING_USER(EMAIL, FIRST_NAME, LAST_NAME, PASSWD, COUNTRY, EMAIL_CODE, LOGIN_DT, REG_DT, MAIL_SEND_DT)
+		VALUES (#{email}, #{firstName}, #{lastName}, #{passwd}, #{country}, #{emailCode}, now(), now(), now())
+	</insert>
+	
+	<select id="userCheck" parameterType="String" resultType="int">
+		SELECT COUNT(*) FROM SOMESING_USER WHERE EMAIL = #{0} AND DEL_YN = 'N'
+	</select>
+	
+	<select id="userView" parameterType="String" resultType="userVO">
+		SELECT * FROM SOMESING_USER
+		WHERE EMAIL = #{0} AND DEL_YN = 'N'
+	</select>
+	
+	<select id="userViewByEmailCode" parameterType="String" resultType="userVO">
+		SELECT * FROM SOMESING_USER
+		WHERE EMAIL_CODE = #{0} AND DEL_YN = 'N'
+	</select>
+	
+	<update id="updateEmailYn" parameterType="String">
+		UPDATE SOMESING_USER SET EMAIL_YN = 'Y'
+		WHERE EMAIL_CODE = #{0} AND DEL_YN = 'N'
+	</update>
+	
+	<update id="updateMailSendDt" parameterType="String">
+		UPDATE SOMESING_USER SET MAIL_SEND_DT = now()
+		WHERE EMAIL = #{0}
+	</update>
+	
+	<update id="updateLoginPw" parameterType="String">
+		UPDATE SOMESING_USER SET PASSWD = #{1} WHERE EMAIL_CODE = #{0}	
+	</update>
+	
+	<update id="updateLoginDt" parameterType="String">
+		UPDATE SOMESING_USER SET LOGIN_DT = now() WHERE EMAIL_CODE = #{0}	
+	</update>
+</mapper>
